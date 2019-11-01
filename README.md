@@ -9,8 +9,8 @@ this repository will create a tf pipeline for jenkins
 
 ```bash
 cd roles/petstore
-export TF_VAR_REGION="us-west-1"
 terraform init
+terraform validate
 terraform fmt
 ```
 
