@@ -1,9 +1,15 @@
 pipeline {
     agent {
         docker {
-            image 'hashicorp/terraform:0.12.9'
+            image 'hashicorp/terraform:0.12.12'
             args '--entrypoint=""'
         }
+    }
+    
+    triggers {
+    }
+
+    parameters {
     }
 
     options {
@@ -13,15 +19,23 @@ pipeline {
       disableConcurrentBuilds()
     }
 
-    stage('Validate') {
+    stages {
+      stage('Validate') {
         steps {
             sh 'terraform validate'
         }
-    }
+      }
     
-    stage('Lint') {
+      stage('Lint') {
         steps {
             sh 'terraform fmt -recursive'
+        }
+      }
+    }
+
+    post {
+        always {
+            cleanWs()
         }
     }
 }
