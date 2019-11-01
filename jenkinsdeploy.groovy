@@ -5,17 +5,11 @@ pipeline {
             args '--entrypoint=""'
         }
     }
-    
-    triggers {
-    }
-
-    parameters {
-    }
 
     options {
       timeout(15)
       timestamps()
-      ansiColor('xterm')
+      //ansiColor('xterm')
       disableConcurrentBuilds()
     }
 
