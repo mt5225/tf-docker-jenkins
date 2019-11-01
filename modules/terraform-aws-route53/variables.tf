@@ -13,5 +13,5 @@ variable "cnames" {
 }
 
 variable "tags" {
-  
+
 }
