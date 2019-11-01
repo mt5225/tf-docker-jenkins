@@ -4,7 +4,7 @@ azs = ["us-west-2a", "us-west-2b", "us-west-2c"]
 
 environment = "petstore-qa-usw2"
 
-account = "prodegeaws6"
+account = "petstoreaws6"
 
 product = "PetStore"
 
@@ -17,3 +17,5 @@ product = "PetStore"
 role_config_map = { 
   petstoresvr      = "1,2,2,t2.small,ami-082b5a644766e0e6f"
 }
+
+region = "us-west-1"

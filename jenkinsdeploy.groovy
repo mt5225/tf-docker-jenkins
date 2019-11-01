@@ -6,10 +6,6 @@ pipeline {
         }
     }
 
-    triggers {
-        pollSCM 'H/5 * * * *'
-    }
-
     options {
       timeout(15)
       timestamps()
