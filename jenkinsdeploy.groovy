@@ -6,6 +6,13 @@ pipeline {
         }
     }
 
+    parameters {
+        choice choices: ['petstore-qa-usw2', 'petstore-dev-usw2', 'petstore-prod-usw2', 'petstore-dr-usw2'], description: '', name: 'envid'
+        choice choices: ['us-west-2', 'us-east-2'], description: '', name: 'region'
+        choice choices: ['Plan', 'Apply', 'Destroy'], description: '', name: 'action'
+        string defaultValue: '', description: '', name: 'target', trim: true
+    }
+
     options {
       timeout(15)
       timestamps()
@@ -19,6 +26,23 @@ pipeline {
     }
 
     stages {
+      stage('create variables') {
+        steps {
+                script {
+                    env.appid = params.envid.split('-')[0]
+                    def region = "${params.region}"
+                    def target = "${params.target}"
+                    env.targetString = ""
+                    if (target != '') {
+                        target.split(",").each { moduleName ->
+                            env.targetString += "-target ${moduleName} "
+                        }
+                    }
+                    def changesExist = -1
+                }
+            }
+        }
+
       stage('Validate') {
         steps {
             sh 'terraform validate'
@@ -31,13 +55,18 @@ pipeline {
         }
       }
 
+      // init stage
+      // Jenkins runs the `terraform init` command which prepares all the terraform code and initializes the remote state
       stage('Init') {
-        steps {
-                ansiColor('xterm') {
-                    sh "terraform init"
-                } 
+        dir("roles/${appid}") {
+          steps {
+            ansiColor('xterm') {
+                sh "terraform init -backend-config=\"key=${params.envid}.tfstate\""
+            } 
+          }
         }
       }
+
     }
 
     post {

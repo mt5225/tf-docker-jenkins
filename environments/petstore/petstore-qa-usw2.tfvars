@@ -18,4 +18,4 @@ role_config_map = {
   petstoresvr = "1,2,2,t2.small,ami-082b5a644766e0e6f"
 }
 
-region = "us-west-1"
+region = "us-west-2"
