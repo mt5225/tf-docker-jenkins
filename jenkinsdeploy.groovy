@@ -60,12 +60,24 @@ pipeline {
       stage('Init') {
         steps{
           dir("roles/${appid}") {
-            ansiColor('xterm') {
-                sh "terraform init -backend-config=\"key=${params.envid}.tfstate\""
-            } 
+              sh "terraform init -backend-config=\"key=${params.envid}.tfstate\""
           }
         }
       }
+
+      stage('plan') {
+          steps{
+              dir("roles/${appid}"){
+                    script {
+                       changesExist = sh( script: "terraform plan -var-file ../../environments/${env.appid}/${params.envid}.tfvars ${env.targetString ?: ''} -detailed-exitcode", returnStatus: true)
+                       if(changesExit == 1) {
+                           error('Error in terraform apply')
+                       }
+                    }
+              }
+          }
+      }
+
 
     }
 
