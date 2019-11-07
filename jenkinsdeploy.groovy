@@ -58,8 +58,8 @@ pipeline {
       // init stage
       // Jenkins runs the `terraform init` command which prepares all the terraform code and initializes the remote state
       stage('Init') {
-        dir("roles/${appid}") {
-          steps {
+        steps{
+          dir("roles/${appid}") {
             ansiColor('xterm') {
                 sh "terraform init -backend-config=\"key=${params.envid}.tfstate\""
             } 
