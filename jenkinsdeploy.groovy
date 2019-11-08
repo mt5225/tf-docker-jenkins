@@ -82,7 +82,7 @@ pipeline {
           //pre-conditions to apply change 
           when {
               allOf {
-                  expression { return (changesExist == 2) }// 0 is no changes, 1 is error, 2 is changes
+                  expression { return (changesExist == 2 || params.action == 'Destroy') }// 0 is no changes, 1 is error, 2 is changes
                   branch 'master'  //only apply changes in master branch
                   expression { return (action == 'Apply') }  //only if user explicitly to do so
               }
