@@ -87,9 +87,12 @@ pipeline {
               }
           }
           steps{
+             slackSend channel: "#terraform", color: 'warning', message: "*${JOB_NAME}* building *${envid}* *${targetString}* needs approval. <${env.BUILD_URL}|Open>"
             script {
               // TODO: notification to slack channel
-              def approval = input(submitterParameter: 'submitter', message: 'Should we continue?')   
+              def approval = input(submitterParameter: 'submitter', message: 'Should we continue?')
+              echo approval
+              slackSend channel: "#terraform", color: 'good', message: "*${JOB_NAME}* building *${envid}* *${targetString}* approved. <${env.BUILD_URL}|Open>"
             }
             dir("roles/${appid}"){
               script {
