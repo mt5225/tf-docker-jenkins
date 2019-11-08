@@ -70,13 +70,38 @@ pipeline {
               dir("roles/${appid}"){
                     script {
                        changesExist = sh( script: "terraform plan -var-file ../../environments/${env.appid}/${params.envid}.tfvars ${env.targetString ?: ''} -detailed-exitcode", returnStatus: true)
-                       if(changesExit == 1) {
+                       if(changesExist == 1) {  //error planning, exist
                            error('Error in terraform apply')
                        }
                     }
               }
           }
-      }
+        }
+
+      stage('apple') {
+          //pre-conditions to apply change 
+          when {
+              allOf {
+                  expression { return (changesExist == 2) }// 0 is no changes, 1 is error, 2 is changes
+                  branch 'master'  //only apply changes in master branch
+                  expression { return (action == 'Apply') }  //only if user explicitly to do so
+              }
+          }
+          script {
+            // TODO: notification to slack channel
+            // sendNotify $channelID ...
+            def approval = input(submitterParameter: 'submitter', message: 'Should we continue?')   
+            }
+          dir("roles/${appid}"){
+              script {
+                  if(params.action == 'Destroy'){
+                        sh "terraform destroy -input=false -auto-approve -force -parallelism 25 -var-file ../../environments/${env.appid}/${params.envid}.tfvars ${env.targetString ?: ''}"
+                      } else {
+                        sh "terraform apply -input=false -auto-approve -parallelism 25 -var-file ../../environments/${env.appid}/${params.envid}.tfvars ${env.targetString ?: ''}"
+                      }
+                }
+          }
+        }
 
 
     }

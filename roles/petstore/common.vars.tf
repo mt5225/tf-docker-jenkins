@@ -41,3 +41,13 @@ variable "role_config_map" {
   description = "map of vm count, disk type, disk size, vm size (in this order)"
   type        = map(string)
 }
+
+variable "azs" {
+  description = "list of availability zones in the region"
+  type        = list(string)
+}
+
+variable "vpc_cidr" {
+  description = "vpc cdr range"
+  type        = string
+}
