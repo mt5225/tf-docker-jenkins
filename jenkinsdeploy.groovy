@@ -30,7 +30,6 @@ pipeline {
         steps {
                 script {
                     env.appid = params.envid.split('-')[0]
-                    def region = "${params.region}"
                     def target = "${params.target}"
                     env.targetString = ""
                     if (target != '') {
@@ -60,7 +59,7 @@ pipeline {
       stage('Init') {
         steps{
           dir("roles/${appid}") {
-              sh "terraform init -backend-config=\"key=${params.envid}.tfstate\""
+              sh "terraform init -backend-config=\"key=${params.envid}.tfstate\" -backend-config=\"region=${params.region}\""
           }
         }
       }
