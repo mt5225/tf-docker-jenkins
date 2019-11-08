@@ -16,7 +16,7 @@ module "psdns" {
       ipaddr = "10.0.0.3"
     },
   ]
-  cnames = ["www", "api", "mail", "ds"]
+  cnames = ["www", "api", "mail"]
 
   tags = {
     CreateBy    = var.created_by
