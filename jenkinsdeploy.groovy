@@ -78,7 +78,7 @@ pipeline {
           }
         }
 
-      stage('apple') {
+      stage('apply') {
           //pre-conditions to apply change 
           when {
               allOf {
@@ -87,12 +87,12 @@ pipeline {
                   expression { return (action == 'Apply') }  //only if user explicitly to do so
               }
           }
-          script {
-            // TODO: notification to slack channel
-            // sendNotify $channelID ...
-            def approval = input(submitterParameter: 'submitter', message: 'Should we continue?')   
+          steps{
+            script {
+              // TODO: notification to slack channel
+              def approval = input(submitterParameter: 'submitter', message: 'Should we continue?')   
             }
-          dir("roles/${appid}"){
+            dir("roles/${appid}"){
               script {
                   if(params.action == 'Destroy'){
                         sh "terraform destroy -input=false -auto-approve -force -parallelism 25 -var-file ../../environments/${env.appid}/${params.envid}.tfvars ${env.targetString ?: ''}"
@@ -100,10 +100,9 @@ pipeline {
                         sh "terraform apply -input=false -auto-approve -parallelism 25 -var-file ../../environments/${env.appid}/${params.envid}.tfvars ${env.targetString ?: ''}"
                       }
                 }
+            }
           }
         }
-
-
     }
 
     post {
