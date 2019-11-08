@@ -59,7 +59,7 @@ pipeline {
       stage('Init') {
         steps{
           dir("roles/${appid}") {
-              sh "terraform init -backend-config=\"key=${params.envid}.tfstate\" -backend-config=\"region=${params.region}\""
+              sh "terraform init -backend-config=\"key=${params.envid}.tfstate\" -backend-config=\"bucket=${params.envid}\" -backend-config=\"region=${params.region}\""
           }
         }
       }
