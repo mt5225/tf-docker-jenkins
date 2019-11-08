@@ -26,3 +26,8 @@ variable "tags" {
   description = "tags for the key pair"
   type        = map
 }
+
+variable "key_count" {
+  description = "number of keys pairs"
+  type = number
+}
