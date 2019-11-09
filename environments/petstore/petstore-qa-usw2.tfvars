@@ -17,7 +17,7 @@ product = "PetStore"
 
 role_config_map = {
   petstoresvr = "1,2,2,t2.small,ami-082b5a644766e0e6f"
-  petstorekey = "2"
+  petstorekey = "3"
 }
 
 region = "us-west-2"
